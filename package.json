@@ -1,0 +1,32 @@
+{
+  "name": "netwatch",
+  "version": "1.0.0",
+  "description": "Realtime network monitoring dashboard with Node.js, MySQL, and Socket.IO",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "migrate": "node scripts/migrate.js"
+  },
+  "keywords": [
+    "network-monitoring",
+    "socket.io",
+    "express",
+    "mysql"
+  ],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "csv-parse": "^5.5.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.11.3",
+    "node-cron": "^3.0.3",
+    "ping": "^0.4.4",
+    "read-excel-file": "^5.8.8",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

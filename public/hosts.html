@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetWatch Host Management</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero compact-hero">
+      <div>
+        <p class="eyebrow">NetWatch</p>
+        <h1>Kelola host, scan subnet, import spreadsheet, dan report jaringan.</h1>
+        <p class="hero-copy">Halaman ini sekarang menjadi pusat operasional: tambah host manual, hentikan monitoring otomatis global, import Excel atau CSV, scan subnet, lalu simpan hasilnya ke database.</p>
+      </div>
+      <nav class="hero-nav">
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link is-active" href="/hosts">Manajemen Host</a>
+      </nav>
+    </header>
+
+    <main class="page-grid hosts-layout">
+      <section class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Host form</p>
+            <h2 id="formTitle">Tambah host baru</h2>
+          </div>
+          <button id="cancelEdit" class="ghost-button hidden" type="button">Batal edit</button>
+        </div>
+
+        <form id="hostForm" class="host-form">
+          <input id="hostId" type="hidden">
+          <label>
+            <span>Label host</span>
+            <input id="label" name="label" type="text" placeholder="Contoh: PC Finance" required>
+          </label>
+          <label>
+            <span>IP address / hostname</span>
+            <input id="ip_address" name="ip_address" type="text" placeholder="192.168.1.24 atau pc-finance.local" required>
+          </label>
+          <label>
+            <span>Pemilik perangkat</span>
+            <input id="owner_name" name="owner_name" type="text" placeholder="Nama PIC / user">
+          </label>
+          <label>
+            <span>Divisi / team</span>
+            <input id="owner_team" name="owner_team" type="text" placeholder="Finance, Infra, Backend">
+          </label>
+          <label>
+            <span>Group</span>
+            <input id="group_name" name="group_name" type="text" placeholder="Office, Production, Network Core">
+          </label>
+          <label>
+            <span>Interval ping (detik)</span>
+            <input id="ping_interval" name="ping_interval" type="number" min="10" max="3600" value="60" required>
+          </label>
+          <label class="full-width">
+            <span>Deskripsi</span>
+            <textarea id="description" name="description" rows="4" placeholder="Catatan tambahan untuk host ini"></textarea>
+          </label>
+          <label class="checkbox-row full-width">
+            <input id="is_active" name="is_active" type="checkbox" checked>
+            <span>Aktif dipantau</span>
+          </label>
+          <div class="form-actions full-width">
+            <button id="saveHostButton" class="primary-button" type="submit">Simpan host</button>
+          </div>
+        </form>
+
+        <div id="formMessage" class="inline-message empty-state">Belum ada aksi.</div>
+      </section>
+
+      <section class="panel table-panel hosts-control-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Operations</p>
+            <h2>Kontrol monitoring dan inventory</h2>
+          </div>
+          <div class="action-row">
+            <button id="triggerImportButton" class="ghost-button" type="button">Import Excel/CSV</button>
+            <button id="exportHostsButton" class="ghost-button" type="button">Export Host CSV</button>
+            <button id="exportLogsButton" class="ghost-button" type="button">Export Log CSV</button>
+          </div>
+          <input id="importFileInput" type="file" accept=".xlsx,.csv" class="hidden">
+        </div>
+
+        <div class="monitor-strip">
+          <div>
+            <strong id="monitorStateText">Memuat status monitor...</strong>
+            <div class="muted">Stop semua akan menghentikan ping terjadwal global. Manual ping tetap tersedia.</div>
+          </div>
+          <div class="action-row">
+            <button id="pauseMonitorButton" class="danger-button" type="button">Stop semua</button>
+            <button id="resumeMonitorButton" class="primary-button" type="button">Start semua</button>
+          </div>
+        </div>
+
+        <div class="toolbar-grid">
+          <label>
+            <span>Search</span>
+            <input id="searchFilter" type="search" placeholder="Cari label, IP, owner, hostname">
+          </label>
+          <label>
+            <span>Status</span>
+            <select id="statusFilter">
+              <option value="all">Semua</option>
+              <option value="up">UP</option>
+              <option value="down">DOWN</option>
+              <option value="unknown">UNKNOWN</option>
+            </select>
+          </label>
+          <label>
+            <span>Monitoring</span>
+            <select id="activeFilter">
+              <option value="all">Semua</option>
+              <option value="1">Aktif</option>
+              <option value="0">Stop</option>
+            </select>
+          </label>
+          <label>
+            <span>Group</span>
+            <select id="groupFilter">
+              <option value="all">Semua group</option>
+            </select>
+          </label>
+          <label>
+            <span>Team</span>
+            <select id="teamFilter">
+              <option value="all">Semua team</option>
+            </select>
+          </label>
+          <div class="toolbar-actions">
+            <button id="applyFiltersButton" class="ghost-button" type="button">Refresh</button>
+            <button id="resetFiltersButton" class="ghost-button" type="button">Reset filter</button>
+          </div>
+        </div>
+
+        <div class="scan-shell">
+          <div class="panel-heading compact-heading">
+            <div>
+              <p class="panel-kicker">Network scan</p>
+              <h2>Scan subnet lalu simpan hasil pilihan</h2>
+            </div>
+          </div>
+
+          <div class="toolbar-grid">
+            <label>
+              <span>Jaringan lokal terdeteksi</span>
+              <select id="detectedNetworkSelect">
+                <option value="">Pilih jaringan lokal</option>
+              </select>
+            </label>
+            <label>
+              <span>Subnet / CIDR</span>
+              <input id="scanSubnetInput" type="text" placeholder="Contoh: 192.168.1.0/24">
+            </label>
+            <div class="toolbar-actions compact-end">
+              <button id="scanNetworkButton" class="primary-button" type="button">Scan network</button>
+            </div>
+          </div>
+
+          <div class="toolbar-grid">
+            <label>
+              <span>Owner default</span>
+              <input id="scanOwnerDefault" type="text" placeholder="Owner untuk hasil scan yang disimpan">
+            </label>
+            <label>
+              <span>Team default</span>
+              <input id="scanTeamDefault" type="text" placeholder="Team / divisi default">
+            </label>
+            <label>
+              <span>Group default</span>
+              <input id="scanGroupDefault" type="text" placeholder="Group default untuk host baru">
+            </label>
+            <label>
+              <span>Interval default</span>
+              <input id="scanIntervalDefault" type="number" min="10" max="3600" value="60">
+            </label>
+            <label class="checkbox-row compact-checkbox">
+              <input id="scanActiveDefault" type="checkbox" checked>
+              <span>Aktif setelah disimpan</span>
+            </label>
+          </div>
+
+          <div class="scan-status-row">
+            <div id="scanSummary" class="inline-message empty-state">Belum ada hasil scan.</div>
+            <div class="action-row">
+              <button id="selectAllScanButton" class="ghost-button hidden" type="button">Pilih semua hasil baru</button>
+              <button id="saveSelectedScanButton" class="primary-button hidden" type="button">Simpan hasil terpilih</button>
+            </div>
+          </div>
+
+          <div id="scanProgressPanel" class="scan-progress hidden" aria-live="polite">
+            <div class="scan-progress-head">
+              <strong id="scanProgressTitle">Scan sedang berjalan...</strong>
+              <span id="scanProgressPercent">0%</span>
+            </div>
+            <div class="scan-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="scanProgressFill" class="scan-progress-fill"></span>
+            </div>
+            <div class="scan-progress-meta">
+              <span id="scanProgressCounter" class="muted">0 / 0 host</span>
+              <span id="scanProgressStats" class="muted">UP 0 · DOWN 0 · UNKNOWN 0</span>
+              <span id="scanProgressCurrent" class="muted">Menunggu host pertama...</span>
+            </div>
+          </div>
+
+          <div id="scanResultsWrap" class="table-wrap hidden">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pilih</th>
+                  <th>IP</th>
+                  <th>Status</th>
+                  <th>Latency</th>
+                  <th>Packet Loss</th>
+                  <th>Hostname</th>
+                  <th>Database</th>
+                </tr>
+              </thead>
+              <tbody id="scanResultsTableBody">
+                <tr>
+                  <td colspan="7" class="empty-state">Belum ada hasil scan.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel-heading compact-heading">
+          <div>
+            <p class="panel-kicker">Registered hosts</p>
+            <h2>Daftar host</h2>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Alamat</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Interval</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="hostManagementTableBody">
+              <tr>
+                <td colspan="6" class="empty-state">Memuat host...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket-client.js"></script>
+  <script src="/js/hosts.js"></script>
+</body>
+</html>

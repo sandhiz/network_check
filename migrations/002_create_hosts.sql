@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS hosts (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  label VARCHAR(100) NOT NULL,
+  ip_address VARCHAR(191) NOT NULL,
+  description TEXT NULL,
+  group_name VARCHAR(100) NULL,
+  ping_interval INT NOT NULL DEFAULT 60,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  last_status ENUM('up', 'down', 'unknown') NOT NULL DEFAULT 'unknown',
+  last_ping_at DATETIME NULL,
+  last_latency FLOAT NULL,
+  owner_name VARCHAR(100) NULL,
+  owner_team VARCHAR(100) NULL,
+  detected_hostname VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uniq_hosts_ip_address (ip_address),
+  KEY idx_hosts_group_name (group_name),
+  KEY idx_hosts_status (last_status),
+  KEY idx_hosts_active (is_active)
+);

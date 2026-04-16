@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetWatch Host Detail</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero compact-hero">
+      <div>
+        <p class="eyebrow">NetWatch</p>
+        <h1 id="detailTitle">Detail host</h1>
+        <p class="hero-copy">Lihat pemilik perangkat, status terakhir, uptime, filter log, dan export report CSV per host.</p>
+      </div>
+      <nav class="hero-nav">
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link" href="/hosts">Manajemen Host</a>
+      </nav>
+    </header>
+
+    <main class="page-grid detail-layout">
+      <section class="panel metadata-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Host identity</p>
+            <h2>Metadata</h2>
+          </div>
+          <div class="action-row">
+            <button id="toggleHostButton" class="ghost-button" type="button">Stop ping otomatis</button>
+            <button id="manualPingButton" class="primary-button" type="button">Manual ping</button>
+          </div>
+        </div>
+        <div id="detailMessage" class="inline-message is-muted">Memuat detail host...</div>
+        <dl id="hostMetadata" class="meta-grid">
+          <div><dt>Status</dt><dd>-</dd></div>
+        </dl>
+      </section>
+
+      <section class="panel stats-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Uptime summary</p>
+            <h2>Window statistik</h2>
+          </div>
+        </div>
+        <div id="uptimeCards" class="stats-cards">
+          <article class="stat-card"><span>24 jam</span><strong>0%</strong></article>
+        </div>
+      </section>
+
+      <section class="panel alerts-panel full-span">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Log filters</p>
+            <h2>Riwayat ping</h2>
+          </div>
+          <div class="action-row">
+            <button id="applyLogFiltersButton" class="ghost-button" type="button">Apply</button>
+            <button id="resetLogFiltersButton" class="ghost-button" type="button">Reset</button>
+            <button id="exportHostLogsButton" class="primary-button" type="button">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="toolbar-grid">
+          <label>
+            <span>Status</span>
+            <select id="logStatusFilter">
+              <option value="all">Semua</option>
+              <option value="up">UP</option>
+              <option value="down">DOWN</option>
+            </select>
+          </label>
+          <label>
+            <span>Dari</span>
+            <input id="logFromFilter" type="datetime-local">
+          </label>
+          <label>
+            <span>Sampai</span>
+            <input id="logToFilter" type="datetime-local">
+          </label>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Status</th>
+                <th>Latency</th>
+                <th>Packet Loss</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr>
+                <td colspan="5" class="empty-state">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket-client.js"></script>
+  <script src="/js/detail.js"></script>
+</body>
+</html>
