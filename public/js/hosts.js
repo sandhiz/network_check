@@ -205,24 +205,24 @@ function renderHosts() {
     .map(
       (host) => `
         <tr>
-          <td>
+          <td data-label="Label">
             <strong>${host.label}</strong>
             <div class="muted">${host.group_name || 'Tanpa group'}</div>
           </td>
-          <td>
+          <td data-label="Alamat">
             <div>${host.ip_address}</div>
             <div class="muted">${host.detected_hostname || 'Hostname belum terdeteksi'}</div>
           </td>
-          <td>
+          <td data-label="Owner">
             <div>${host.owner_name || '-'}</div>
             <div class="muted">${host.owner_team || 'Belum diisi'}</div>
           </td>
-          <td>
+          <td data-label="Status">
             ${statusBadge(host.last_status)}
             <div class="muted top-gap">${host.is_active ? 'Auto ping aktif' : 'Auto ping stop'}</div>
           </td>
-          <td>${host.ping_interval} detik</td>
-          <td>
+          <td data-label="Interval">${host.ping_interval} detik</td>
+          <td data-label="Aksi">
             <div class="action-row">
               <a class="ghost-button" href="/detail?id=${host.id}">Detail</a>
               <button class="ghost-button" type="button" data-action="edit" data-id="${host.id}">Edit</button>
@@ -359,15 +359,15 @@ function renderScanResults() {
     .map(
       (row, index) => `
         <tr>
-          <td>
+          <td data-label="Pilih">
             <input type="checkbox" data-scan-index="${index}" ${row.already_registered ? 'disabled' : ''} ${row.selected ? 'checked' : ''}>
           </td>
-          <td>${row.ip_address}</td>
-          <td>${statusBadge(row.status)}</td>
-          <td>${row.latency === null || row.latency === undefined ? '-' : `${Number(row.latency).toFixed(2)} ms`}</td>
-          <td>${row.packet_loss}%</td>
-          <td>${row.detected_hostname || '-'}</td>
-          <td>${row.already_registered ? `Sudah ada${row.registered_label ? ` (${row.registered_label})` : ''}` : 'Host baru'}</td>
+          <td data-label="IP">${row.ip_address}</td>
+          <td data-label="Status">${statusBadge(row.status)}</td>
+          <td data-label="Latency">${row.latency === null || row.latency === undefined ? '-' : `${Number(row.latency).toFixed(2)} ms`}</td>
+          <td data-label="Packet Loss">${row.packet_loss}%</td>
+          <td data-label="Hostname">${row.detected_hostname || '-'}</td>
+          <td data-label="Database">${row.already_registered ? `Sudah ada${row.registered_label ? ` (${row.registered_label})` : ''}` : 'Host baru'}</td>
         </tr>
       `
     )

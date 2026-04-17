@@ -652,22 +652,172 @@ tbody tr:hover {
 
 @media (max-width: 720px) {
   .app-shell {
-    width: min(100% - 20px, 100%);
-    padding-top: 20px;
+    width: min(100% - 16px, 100%);
+    padding: 16px 0 28px;
   }
 
   .hero {
     flex-direction: column;
-    padding: 24px;
+    gap: 18px;
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .compact-hero {
+    padding: 18px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.7rem, 9vw, 2.4rem);
+  }
+
+  .hero-copy {
+    margin-top: 12px;
+    font-size: 0.95rem;
   }
 
   .hero-nav {
     align-items: stretch;
+    width: 100%;
+  }
+
+  .nav-link,
+  .ghost-button,
+  .primary-button,
+  .danger-button {
+    width: 100%;
   }
 
   .filter-grid,
   .host-form,
-  .meta-grid {
+  .meta-grid,
+  .toolbar-grid,
+  .stats-cards {
     grid-template-columns: 1fr;
+  }
+
+  .page-grid {
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .panel {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .panel-heading,
+  .table-toolbar,
+  .monitor-strip,
+  .scan-status-row,
+  .scan-progress-head,
+  .scan-progress-meta,
+  .toolbar-actions,
+  .action-row,
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .panel-heading,
+  .table-toolbar {
+    gap: 12px;
+  }
+
+  .table-toolbar,
+  .monitor-strip,
+  .scan-shell,
+  .scan-progress {
+    padding: 14px;
+  }
+
+  .compact-checkbox {
+    align-items: start;
+    padding-top: 0;
+  }
+
+  .checkbox-row {
+    align-items: flex-start;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .table-wrap table,
+  .table-wrap thead,
+  .table-wrap tbody,
+  .table-wrap tr,
+  .table-wrap td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrap thead {
+    display: none;
+  }
+
+  .table-wrap tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  .table-wrap tbody tr {
+    margin: 0;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 12px 28px rgba(20, 44, 30, 0.08);
+  }
+
+  .table-wrap tbody tr:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .table-wrap td {
+    padding: 0;
+    border: 0;
+  }
+
+  .table-wrap td + td {
+    margin-top: 12px;
+  }
+
+  .table-wrap td[data-label] {
+    display: grid;
+    grid-template-columns: minmax(84px, 108px) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+
+  .table-wrap td[data-label]::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .table-wrap td[colspan] {
+    display: block;
+    margin: 0;
+    padding: 2px 0;
+  }
+
+  .table-wrap td[data-label] .action-row {
+    gap: 10px;
+  }
+
+  .table-wrap td[data-label="Pilih"] input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+  }
+
+  .table-wrap td[data-label] .muted,
+  .table-wrap td[data-label] .top-gap {
+    margin-top: 6px;
   }
 }

@@ -144,19 +144,19 @@ function renderHostsTable() {
     .map(
       (host) => `
         <tr>
-          <td>
+          <td data-label="Host">
             <a class="action-link" href="/detail?id=${host.id}">${host.label}</a>
             <div class="muted">${host.detected_hostname || 'Hostname belum terdeteksi'}</div>
           </td>
-          <td>${host.ip_address}</td>
-          <td>
+          <td data-label="IP / Hostname">${host.ip_address}</td>
+          <td data-label="Owner">
             <strong>${host.owner_name || '-'}</strong>
             <div class="muted">${host.owner_team || 'Belum diisi'}</div>
           </td>
-          <td>${host.group_name || '-'}</td>
-          <td>${statusBadge(host.last_status)}</td>
-          <td>${formatLatency(host.last_latency)}</td>
-          <td>${formatDateTime(host.last_ping_at)}</td>
+          <td data-label="Group">${host.group_name || '-'}</td>
+          <td data-label="Status">${statusBadge(host.last_status)}</td>
+          <td data-label="Latency">${formatLatency(host.last_latency)}</td>
+          <td data-label="Last Ping">${formatDateTime(host.last_ping_at)}</td>
         </tr>
       `
     )

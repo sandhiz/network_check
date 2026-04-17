@@ -148,11 +148,11 @@ function renderLogs(logs) {
     .map(
       (log) => `
         <tr>
-          <td>${formatDateTime(log.pinged_at)}</td>
-          <td>${statusBadge(log.status)}</td>
-          <td>${log.latency_ms ? `${Number(log.latency_ms).toFixed(2)} ms` : '-'}</td>
-          <td>${log.packet_loss}%</td>
-          <td>${log.error_msg || '-'}</td>
+          <td data-label="Waktu">${formatDateTime(log.pinged_at)}</td>
+          <td data-label="Status">${statusBadge(log.status)}</td>
+          <td data-label="Latency">${log.latency_ms ? `${Number(log.latency_ms).toFixed(2)} ms` : '-'}</td>
+          <td data-label="Packet Loss">${log.packet_loss}%</td>
+          <td data-label="Error">${log.error_msg || '-'}</td>
         </tr>
       `
     )
