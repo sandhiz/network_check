@@ -1,6 +1,10 @@
 const { Server } = require('socket.io');
 
 const { getGlobalStats } = require('../services/stats.service');
+const {
+  queueHostDownNotification,
+  queueHostRecoveredNotification
+} = require('../services/discord-notification.service');
 const { pingHostById } = require('../services/ping.service');
 
 async function broadcastPingResult(io, payload) {
@@ -24,6 +28,8 @@ async function broadcastPingResult(io, payload) {
       ip: payload.ip,
       timestamp: payload.timestamp
     });
+
+    queueHostDownNotification(payload);
   }
 
   if (payload.isRecoveredEvent) {
@@ -33,6 +39,8 @@ async function broadcastPingResult(io, payload) {
       ip: payload.ip,
       timestamp: payload.timestamp
     });
+
+    queueHostRecoveredNotification(payload);
   }
 
   io.emit('stats:update', await getGlobalStats());
